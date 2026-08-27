@@ -1,0 +1,5 @@
+Interface eth0: RX bytes: 14209562  TX bytes: 8592014
+Interface lo:   RX bytes: 19562     TX bytes: 859
+Interface lo:   RX bytes:  14292    TX bytes: 5014
+Interface eth0: RX bytes:  09562    TX bytes: 82014
+Interface eth0: RX bytes:  22705642 TX bytes: 6590814
