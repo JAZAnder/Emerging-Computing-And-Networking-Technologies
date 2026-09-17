@@ -1,0 +1,26 @@
+[
+  {
+    "device_type": "linux",
+    "host": "127.0.0.1",
+    "port": 2231,
+    "username": "netmiko.test",
+    "password": "Password123!",
+    "use_keys": false
+},
+  {
+    "device_type": "linux",
+    "host": "127.0.0.1",
+    "port": 2232,
+    "username": "netmiko.test",
+    "password": "Password123!",
+    "use_keys": false
+    },
+  {
+    "device_type": "linux",
+    "host": "127.0.0.1",
+    "port": 2233,
+    "username": "netmiko.test",
+    "password": "Password123!",
+    "use_keys": false
+    }
+]
