@@ -1,0 +1,18 @@
+{
+    "vyos": {
+	    "connection":{
+	    
+	    	"device_type": "vyos",
+	    	"host": "192.168.122.50", 
+	    	"port": 22, 
+	    	"username": "vyos", 
+	    	"password": "vyos", 
+	    	"use_keys": false, 
+	    	"fast_cli": false
+	    },
+	    "allowed_syslog_ips": [
+		    "192.168.100.5", 
+		    "192.168.122.50"
+	    ]
+    }
+}
