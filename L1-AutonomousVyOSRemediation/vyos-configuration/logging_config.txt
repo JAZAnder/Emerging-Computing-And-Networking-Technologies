@@ -1,0 +1,8 @@
+configure
+set system syslog remote 192.168.100.1 facility all level info
+set system syslog remote 192.168.100.1 protocol udp
+set system syslog remote 192.168.100.1 port 514
+set system syslog remote 192.168.100.1 format rfc5424
+commit
+save
+exit
