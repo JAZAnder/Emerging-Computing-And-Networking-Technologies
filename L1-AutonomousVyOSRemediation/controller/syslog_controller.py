@@ -7,18 +7,18 @@ from netmiko import ConnectHandler
 
 
 
-# Listener Details
+#Listener Details
 LISTEN_IP = "192.168.100.1"  # Bound to virbr1 interface
 LISTEN_PORT = 514
 
-# Pattern matches  down/link fault signals in RFC 5424 logs
+#Pattern matches  down/link fault signals in RFC 5424 logs
 FAULT_PATTERN = re.compile(r"^<\d+>\d*\s*\S+\s+(\S+).*?\b(eth\d+).*(?:Link is Down|link down|state to down|carrier lost)", re.IGNORECASE)
 
-# Load router
+#Load router
 with open("inventory.json") as f:
     INVENTORY = json.load(f)
 
-
+#Find router in inventory
 def get_router_config(hostname, source_ip):
     if hostname in INVENTORY:
         return INVENTORY[hostname]
@@ -29,6 +29,7 @@ def get_router_config(hostname, source_ip):
 
     return None
 
+#Disable effected interface
 def apply_automated_remediation(config, interface_name):
     router_host = config["connection"]["host"]
     print(f"\n[REMEDIATION]: Initiating SSH session to VyOS ({router_host})...")
@@ -50,6 +51,7 @@ def apply_automated_remediation(config, interface_name):
     except Exception as e:
         print(f"[ERROR]: Failed to execute remediation via SSH: {e}")
 
+#Open Port and listen for logs
 def start_syslog_listener():
     """Binds UDP socket to capture real-time syslog datagrams."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
