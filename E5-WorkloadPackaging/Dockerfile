@@ -1,13 +1,13 @@
 FROM python:3.10-slim
 
-# Set working directory inside container
+#Set working directory
 WORKDIR /app
 
-# Copy application script
+# Copy python  script
 COPY webServer.py .
 
-# Expose HTTP port
+# Expose Web Server port
 EXPOSE 8000
 
-# Run HTTP server without buffering output
+# Run HTTP server
 CMD ["python", "-u", "webServer.py"]
