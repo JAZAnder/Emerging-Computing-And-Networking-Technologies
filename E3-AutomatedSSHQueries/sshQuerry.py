@@ -28,3 +28,6 @@ for device in devices:
             print(f"[{hostname}] Could not parse uptime string: '{uptime_output}'")
     except Exception as e:
         print(f"[{device['host']}] Connection failed: {e}")
+
+
+

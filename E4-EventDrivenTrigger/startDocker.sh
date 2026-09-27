@@ -33,3 +33,5 @@ done
 docker exec -it ubuntu-ssh-test-1 ip addr add 10.0.0.1/24 dev eth0
 docker exec -it ubuntu-ssh-test-2 ip addr add 10.0.0.2/24 dev eth0
 docker exec -it ubuntu-ssh-test-3 ip addr add 10.0.0.3/24 dev eth0
+
+
