@@ -1,0 +1,7 @@
+#!/home/joshua_cantu_2/CMPS6510/E7-WirelessTracking/bin/python
+# EASY-INSTALL-DEV-SCRIPT: 'mininet-wifi==2.7','mn'
+__requires__ = 'mininet-wifi==2.7'
+__import__('pkg_resources').require('mininet-wifi==2.7')
+__file__ = '/home/joshua_cantu_2/mininet-wifi/bin/mn'
+with open(__file__) as f:
+    exec(compile(f.read(), __file__, 'exec'))
