@@ -38,8 +38,8 @@ def generate_handoff_plot():
         linewidth=1.8, 
         label=f'Physical Handoff ({handoff_time}s)'
     )
-    ax1.set_ylabel('Latency (ms)')
-    ax1.set_title('Response Latency & Packet Drop')
+    ax1.set_ylabel('HTTP Response Time (ms)')
+    ax1.set_title('Response Time Timeline Across Handoff')
     ax1.grid(True)
     ax1.legend(loc='upper left')
 
@@ -110,7 +110,7 @@ def generate_handoff_plot():
                 x=drop["elapsed_time"], color="red", alpha=0.2, linestyle=":"
             )
     ax2.set_title(
-        "Edge Response Time Timeline Across Handoff (De-skewed)",
+        "Response Time Timeline Across Handoff (De-skewed)",
         fontsize=12,
         pad=15,
     )
