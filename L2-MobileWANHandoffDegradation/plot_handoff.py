@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 def generate_handoff_plot():
     #Check for file
@@ -20,7 +21,8 @@ def generate_handoff_plot():
         handoff_time = data['elapsed_time'].median()
 
     #Create subplots sharing the X-axis
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 8), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 6), sharex=True)
+    ax1.xaxis.set_major_locator(ticker.MultipleLocator(2))
 
     ax1.plot(
         data['elapsed_time'], 
@@ -48,6 +50,7 @@ def generate_handoff_plot():
 
 
     #De-skewed Timeline (Latency Shift & Drops)
+    ax2.xaxis.set_major_locator(ticker.MultipleLocator(2))
     #Filter successful responses
     data_success = data[data["status"] == "SUCCESS"].copy()
     data_drops = data[data["status"] == "DROP"].copy()
