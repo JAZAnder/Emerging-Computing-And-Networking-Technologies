@@ -36,7 +36,7 @@ def main():
         print(f"{'':<6} {idx:<4} | {alice_bases[idx]:<14} | {bob_bases[idx]:<14} | {status}")
         
     print("------------------------------------------------------------------------")
-    print("FILTERED MATCHING INDICES:")
+    print("FILTERED MATCHING BASES:")
     print(sifted_bases)
     print(f"Summary: {len(sifted_bases)} / {len(alice_bases)} bases matched "
           f"({(len(sifted_bases)/len(alice_bases))*100:.1f}% match).")
