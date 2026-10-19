@@ -21,12 +21,13 @@ def alice_protocol(alice, receiver_id):
         alice_bases.append(basis)
 
         qubit = Qubit(alice)
-        gate = "["
+
         value = "0"
         if bit == 1:
             value = "1"
             qubit.X()
         if basis == 1:
+            qubit.H()
             gate = "Hadamard"
         else:
             gate = "None"
@@ -82,6 +83,10 @@ def bob_protocol(bob, sender_id):
         bob_bits.append(bit)
 
 def main():
+    alice_bits.clear()
+    alice_bases.clear()
+    bob_bits.clear()
+    bob_bases.clear()
     network = Network.get_instance()
     nodes = ["Alice", "Eve", "Bob"]
     network.start(nodes)
