@@ -32,7 +32,7 @@ def alice_protocol(alice, receiver_id):
         else:
             gate = "None"
 
-        # Send qubit to Eve (acting as the middleman)
+        # Send qubit to Eve
         print(f"[Run#{str(i+1):>2}]:[{alice.host_id}] Transmitting qubit\t gate: {gate:<8} \t value:{value}")
         alice.send_qubit(receiver_id, qubit, await_ack=True)
         time.sleep(.125)
@@ -53,14 +53,14 @@ def eve_protocol(eve, sender_id, receiver_id):
 
         eve_measured_bit = qubit.measure()
 
-        # Eve re-prepares a new qubit matching her measurement outcome
+        #Eve makes new qubit matching her measurement
         fwd_qubit = Qubit(eve)
         if eve_measured_bit == 1:
             fwd_qubit.X()
         if eve_basis == 1:
             fwd_qubit.H()
 
-        # Forward the altered qubit state to Bob
+        #Forward new qubit to Bob
         print(f"[Run#{str(i+1):>2}]:[{eve.host_id:<5}] Forwarding qubit\t gate: {gate:<8} \t value:{eve_measured_bit}\t")
         eve.send_qubit(receiver_id, fwd_qubit, await_ack=True)
 
