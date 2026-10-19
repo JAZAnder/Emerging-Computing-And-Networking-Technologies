@@ -4,7 +4,7 @@ from qunetsim.objects import Qubit
 NUM_RUNS = 100
 
 def alice_protocol(alice, receiver_id):
-    print(f"[\n{alice.host_id}] Starting transmission of {NUM_RUNS} qubits in superposition state |+>...\n")
+    print(f"\n[{alice.host_id}] Starting transmission of {NUM_RUNS} qubits in superposition state |+>...\n")
     
     for i in range(NUM_RUNS):
         qubit = Qubit(alice)
