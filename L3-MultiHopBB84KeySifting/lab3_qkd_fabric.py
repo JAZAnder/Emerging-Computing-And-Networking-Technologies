@@ -1,4 +1,4 @@
-cd ./import sys
+import sys
 import time
 import numpy as np
 from qunetsim.components import Host, Network
