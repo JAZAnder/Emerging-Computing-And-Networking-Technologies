@@ -1,0 +1,39 @@
+
+services:
+
+  frontend-node:
+    image: alpine:latest
+    container_name: frontend-node
+    command: sleep infinity
+    networks:
+      frontend-underlay:
+        ipv4_address: 172.28.10.10
+  
+  backend-node:
+    image: alpine:latest
+    container_name: backend-node
+    command: sleep infinity
+    networks:
+      backend-underlay:
+        ipv4_address: 172.28.20.10
+
+networks:
+  frontend-underlay:
+    name: frontend-underlay
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.10.0/24
+
+  backend-underlay:
+    name: backend-underlay
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.20.0/24
+
+

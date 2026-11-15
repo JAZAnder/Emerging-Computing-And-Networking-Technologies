@@ -1,0 +1,3 @@
+Attaching to backend-node, frontend-node
+[Kbackend-node exited with code 137
+[Kfrontend-node exited with code 137
