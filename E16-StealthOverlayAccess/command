@@ -1,0 +1,68 @@
+# 1. Log in to the Edge Controller CLI
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge login localhost:1280 -u admin -p admin_password -y
+
+# 2. Create intercept.v1 and host.v1 configurations
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create config secure-database-intercept intercept.v1 '{"protocols":["tcp"],"addresses":["secure-database.ziti"],"portRanges":[{"low":8080,"high":8080}]}'
+
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create config secure-database-host host.v1 '{"protocol":"tcp","address":"127.0.0.1","port":9090}'
+
+# 3. Create the service linking both configurations
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service secure-database --configs secure-database-intercept,secure-database-host
+
+# 4. Create Bind and Dial Service Policies
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service-policy secure-database-bind Bind --service-roles '@secure-database' --identity-roles '@zt-router'
+
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service-policy secure-database-dial Dial --service-roles '@secure-database' --identity-roles '#database-clients'
+
+# 5. Create Edge Router Policies
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create edge-router-policy all-endpoints-routers --edge-router-roles '#all' --identity-roles '#all'
+
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service-edge-router-policy all-services-routers --edge-router-roles '#all' --service-roles '#all'
+
+# 6. Create the client identity (writes directly to ./ziti-data/endpoint-client.jwt on your host)
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create identity endpoint-client -a 'database-clients' -o /persistent/endpoint-client.jwt
+
+
+
+
+# 1. Enroll endpoint-client.jwt into endpoint-client.json
+docker exec dark-app-container /var/openziti/ziti-bin/ziti edge enroll /persistent/endpoint-client.jwt -o /persistent/endpoint-client.json
+
+# 2. Underlay Reconnaissance Audit (confirm 8080 and 9090 are closed on eth0)
+TARGET_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' zt-controller)
+nmap -Pn -p 8080,9090 "$TARGET_IP"
+
+# 3. Start the proxy tunneler in detached mode and verify running processes
+docker exec -d dark-app-container /var/openziti/ziti-bin/ziti tunnel proxy -i /persistent/endpoint-client.json secure-database:8080
+docker exec dark-app-container ps aux
+
+# 4. Access the dark web application over the OpenZiti overlay
+docker exec dark-app-container curl -i http://localhost:8080
+
+
+
+ZITI="docker exec zt-controller /var/openziti/ziti-bin/ziti"
+
+# Provision on zt-controller
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge login zt-controller:1280 -u admin -p admin_password -y
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create config secure-database-intercept intercept.v1 '{"protocols":["tcp"],"addresses":["secure-database.ziti"],"portRanges":[{"low":8080,"high":8080}]}'
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create config secure-database-host host.v1 '{"protocol":"tcp","address":"127.0.0.1","port":9090}'
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service secure-database --configs secure-database-intercept,secure-database-host
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create identity dark-app-server -o /persistent/dark-app-server.jwt
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create identity endpoint-client -a 'database-clients' -o /persistent/endpoint-client.jwt
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service-policy secure-database-bind Bind --service-roles '@secure-database' --identity-roles '@dark-app-server'
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service-policy secure-database-dial Dial --service-roles '@secure-database' --identity-roles '#database-clients'
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create edge-router-policy all-endpoints-routers --edge-router-roles '#all' --identity-roles '#all'
+docker exec zt-controller /var/openziti/ziti-bin/ziti edge create service-edge-router-policy all-services-routers --edge-router-roles '#all' --service-roles '#all'
+
+# Enroll & run both host (9090) and client proxy (8080) inside dark-app-container
+docker exec dark-app-container /var/openziti/ziti-bin/ziti edge enroll -j /persistent/dark-app-server.jwt -o /persistent/dark-app-server.json
+docker exec dark-app-container /var/openziti/ziti-bin/ziti edge enroll -j /persistent/endpoint-client.jwt -o /persistent/endpoint-client.json
+docker exec -d dark-app-container /var/openziti/ziti-bin/ziti tunnel host -i /persistent/dark-app-server.json
+
+nmap 
+
+docker exec -d dark-app-container /var/openziti/ziti-bin/ziti tunnel proxy -i /persistent/endpoint-client.json secure-database:8080
+
+# Verify
+docker exec dark-app-container curl -i http://localhost:8080

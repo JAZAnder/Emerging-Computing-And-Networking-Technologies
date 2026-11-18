@@ -218,3 +218,4 @@ __marimo__/
 .streamlit/secrets.toml
 .vscode/launch.json
 L2-MobileWANHandoffDegradation/*.apconf
+E16-StealthOverlayAccess/ziti-data/*
